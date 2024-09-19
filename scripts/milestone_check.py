@@ -10,6 +10,7 @@ import subprocess
 import sys
 
 import requests
+from security import safe_command
 
 ranges = {
     "0.35": "origin/0.35.0 --not origin/0.34.x",
@@ -50,8 +51,7 @@ if MILESTONE not in ranges:
     sys.exit(1)
 
 
-out = subprocess.run(
-    f"git log {ranges[MILESTONE]} --format='%H,%cE,%s'",
+out = safe_command.run(subprocess.run, f"git log {ranges[MILESTONE]} --format='%H,%cE,%s'",
     shell=True,  # noqa S602
     encoding="utf8",
     stdout=subprocess.PIPE,
