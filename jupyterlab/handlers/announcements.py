@@ -17,6 +17,7 @@ from packaging.version import parse
 from tornado import httpclient, web
 
 from jupyterlab._version import __version__
+import defusedxml.ElementTree
 
 ISO8601_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 JUPYTERLAB_LAST_RELEASE_URL = "https://pypi.org/pypi/pretzelai/json"
@@ -227,7 +228,7 @@ class NewsHandler(APIHandler):
                     self.news_url,
                     headers={"Content-Type": "application/atom+xml"},
                 )
-                tree = ET.fromstring(response.body)  # noqa S314
+                tree = defusedxml.ElementTree.fromstring(response.body)  # noqa S314
 
                 def build_entry(node):
                     def get_xml_text(attr: str, default: Optional[str] = None) -> str:
